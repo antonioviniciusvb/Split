@@ -1,0 +1,35 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Split">
+
+    <Style TargetType="{x:Type Button}" x:Key="foregroundButtonStyle">
+        <Setter Property="Foreground" Value="Black"></Setter>
+        <Setter Property="Background" Value="#FF33BCBA"></Setter>
+    </Style>
+
+    <Style TargetType="{x:Type TextBlock}" x:Key="colorDefault">
+        <Setter Property="Foreground" Value="Black"></Setter>
+        <Setter Property="Background" Value="AliceBlue"></Setter>
+    </Style>
+
+    <Style TargetType="{x:Type TextBox}" x:Key="textBoxDefault">
+        <Setter Property="Margin"   Value="5"></Setter>
+        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+        <Setter Property="TextAlignment" Value="Center"></Setter>
+        <Setter Property="VerticalAlignment" Value="center"></Setter>
+        <Setter Property="IsReadOnly" Value="True"></Setter>
+    </Style>
+
+    <Style TargetType="{x:Type TextBlock}" x:Key="textBlockTitleStyle" BasedOn="{StaticResource colorDefault}">
+        <Setter Property="TextAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"></Setter>
+    </Style>
+
+    
+    <Style TargetType="{x:Type Button}" x:Key="buttonStyle" BasedOn="{StaticResource foregroundButtonStyle}">
+        <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+        <Setter Property="Cursor" Value="Hand"></Setter>
+        <Setter Property="Foreground" Value="White"></Setter>
+    </Style>
+
+</ResourceDictionary>

@@ -1,12 +1,171 @@
-﻿<Window x:Class="Split.MainWindow"
+﻿<Controls:MetroWindow  
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:local="clr-namespace:Split"
+        xmlns:ModelView="clr-namespace:Split.Model"
+        x:Class="Split.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Split PDF" Height="700" Width="1200" WindowState="Maximized" WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="2">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="7*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
+            <Expander Margin="2" Header="Layout" ExpandDirection="Right">
+                <Grid x:Name="gridConfig" MaxWidth="600">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <DockPanel Grid.Row="0" Margin="5" LastChildFill="False" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <TextBlock  MouseLeftButtonDown="AddLayout"  Cursor="Hand" ToolTip="Add Layout" Margin="0,0,15,0" ><InlineUIContainer>
+                                    <iconPacks:PackIconFontAwesome Height="20" Foreground="Green" Width="20" Kind="PlusSolid"/>
+                                </InlineUIContainer></TextBlock>
+
+                            <TextBlock MouseLeftButtonDown="TextBlock_MouseLeftButtonDown" Margin="0,0,15,0"  Cursor="Hand" ToolTip="Editar"><InlineUIContainer>
+                                    <iconPacks:PackIconFontAwesome Height="20" Foreground="Blue" Width="20" Kind="EditRegular"/>
+                                </InlineUIContainer></TextBlock>
+
+                                <TextBlock Cursor="Hand" MouseLeftButtonDown="DeleteItem" ToolTip="Deletar" Margin="0,0,15,0" ><InlineUIContainer>
+                                    <iconPacks:PackIconFontAwesome Height="20" Margin="1" Foreground="Red" Width="20" Kind="TrashAltSolid"/>
+                                </InlineUIContainer></TextBlock>
+
+                        </DockPanel>
+
+                        <TreeView  Grid.Row="1"  x:Name="trvLayouts" MouseDoubleClick="TrvLayouts_MouseDoubleClick" KeyDown="TrvLayouts_KeyDown_1" Controls:ScrollViewerHelper.IsHorizontalScrollWheelEnabled="True" Focusable="False" SnapsToDevicePixels="True">
+                            <TreeView.Resources>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#FF6CF4D4" />
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+
+                                <HierarchicalDataTemplate DataType="{x:Type ModelView:Layout}" ItemsSource="{Binding Fields, Mode=TwoWay}">
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <TextBlock Text="{Binding Id}" FontWeight="Bold"/>
+                                        <TextBlock Text="_"/>
+                                        <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                                        <TextBlock Text=" (" />
+                                        <TextBlock Text="Height: " Foreground="Green"/>
+                                        <TextBlock Text="{Binding Height}"  Foreground="Blue" />
+                                        <TextBlock Text="  Width: " Foreground="Green"/>
+                                        <TextBlock Text="{Binding Width}" Foreground="Blue"  />
+                                        <TextBlock Text=") " />
+                                        <TextBlock Text="  [" Foreground="Blue" />
+                                        <TextBlock Text="{Binding Fields.Count}" Foreground="Blue" />
+                                        <TextBlock Text="]" Foreground="Blue" />
+
+                                    </StackPanel>
+                                </HierarchicalDataTemplate>
+
+                                <DataTemplate DataType="{x:Type ModelView:Field}" >
+
+
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <TextBlock Text="{Binding Id}"/>
+                                        <TextBlock Text="_"/>
+                                        <TextBlock Text="{Binding Name}"/>
+
+                                        <TextBlock Text="  (Display: " Foreground="Green"/>
+                                        <TextBlock Text="{Binding Display}" Foreground="Blue" />
+
+
+                                        <TextBlock Text=",  X: " Foreground="Green"/>
+                                        <TextBlock Text="{Binding Position_x}" Foreground="Blue" />
+                                        
+                                        <TextBlock Text="  Y: " Foreground="Green"/>
+                                        <TextBlock Text="{Binding Position_y}" Foreground="Blue" />
+
+                                        <TextBlock Text=", Tipo: " Foreground="Green"/>
+                                        <TextBlock Text="{Binding Type}" Foreground="Blue" />
+                                        
+                                        <TextBlock Text=", Exp: " Foreground="Green"/>
+                                        <TextBlock Text="{Binding Expression}" Foreground="Blue" />
+                                        <TextBlock Text=")" Foreground="Green" />
+
+                                    </StackPanel>
+                                </DataTemplate>
+                            </TreeView.Resources>
+
+                            <TreeView.ItemContainerStyle>
+                                <Style TargetType="{x:Type TreeViewItem}">
+                                    <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                </Style>
+                            </TreeView.ItemContainerStyle>
+
+                        </TreeView>
+                    </Grid>
+                </Grid>
+            </Expander>
+
+
+            <Expander Margin="2"  IsExpanded="True" Header="Processar" ExpandDirection="Right">
+                <Grid x:Name="gridProcess" Width="600">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="9*"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions> 
+                    <StackPanel>
+                        <ComboBox 
+                            Margin="5"
+                            Controls:TextBoxHelper.ClearTextButton="true"
+                            HorizontalContentAlignment="Center"
+                            x:Name="cbxLayouts"
+                            ItemsSource="{Binding Layout}"
+                            Controls:TextBoxHelper.Watermark="Layout para Processamento"
+                            Controls:TextBoxHelper.UseFloatingWatermark="True"
+                            
+                            >
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+                                        <Run Text="{Binding Id}"/>
+                                        <Run Text="_"></Run>
+                                        <Run Text="{Binding Name}"/>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                            
+                        </ComboBox>
+
+                        <Controls:NumericUpDown Margin="5"
+                                                Minimum="1"
+                                                Maximum="30000"
+                                                Value="1000"
+                                                HorizontalContentAlignment="Center"
+                                                Controls:TextBoxHelper.ClearTextButton="True"
+                                                Controls:TextBoxHelper.Watermark="Split"
+                                                Controls:TextBoxHelper.UseFloatingWatermark="True" Interval="1000"/>
+
+                        <Button Command="{Binding AddPDF, Mode=TwoWay}" Style="{StaticResource buttonStyle}" Content="Adicionar Arquivos PDF"  VerticalAlignment="Center" ToolTip = "Selecione os arquivos PDF" Margin="20"/>
+
+                        <ListView MaxHeight="600" Controls:ScrollViewerHelper.VerticalScrollBarOnLeftSide="True" PreviewKeyDown="LstFiles_PreviewKeyDown"
+                                  Margin="5" Name="lstFiles"
+                                  ItemsSource="{Binding FileProcess, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <ListView.View>
+                                <GridView  Selector.IsSelected="True">
+                                    <GridViewColumn Header="Name" Width="450" DisplayMemberBinding="{Binding Name, Mode=TwoWay}" />
+                                    <GridViewColumn Header="Pgs" Width="100" DisplayMemberBinding="{Binding Pgs, Mode=TwoWay}" />
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+
+                    </StackPanel>
+                </Grid>
+            </Expander>
+            
+        </StackPanel>
+
         
+
     </Grid>
-</Window>
+
+</Controls:MetroWindow>
